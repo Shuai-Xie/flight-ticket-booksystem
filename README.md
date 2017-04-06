@@ -36,4 +36,4 @@
 <img src="https://raw.githubusercontent.com/Shuai-Xie/flight-ticket-booksystem/master/web-picture/admin_finance.png"/>
 
 ## 使用说明
-- 详细的使用说用可以查看我的实验报告[数据库课设 - 机票预订系统](https://github.com/Shuai-Xie/flight-ticket-booksystem/blob/master/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AF%BE%E8%AE%BE-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A.pdf)
+- 详细的使用说用可以查看我的实验报告 [数据库课设 - 机票预订系统](https://github.com/Shuai-Xie/flight-ticket-booksystem/blob/master/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AF%BE%E8%AE%BE-%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A.pdf)
