@@ -1,0 +1,60 @@
+{% extends 'booksystem/base.html' %}
+
+{% block login_display %}
+    <a href="#">欢迎您 {{ username }} 先生/女士</a>
+{% endblock %}
+
+{% block style %}
+    <style>
+        .main {
+            margin-top: 20px;
+            margin-left: 50px;
+            margin-right: 50px;
+        }
+    </style>
+{% endblock %}
+
+{% block js %}
+    <script>
+        function refund(flight_id) {
+            var choice = confirm("尊敬的顾客，您确定要退票吗");
+            if (choice == true) {
+                window.location = "/booksystem/refund/flight/" + flight_id;
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="main">
+
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th style="text-align: center">航班架次</th>
+                <th style="text-align: center">起飞机场</th>
+                <th style="text-align: center">到达机场</th>
+                <th style="text-align: center">起飞时间</th>
+                <th style="text-align: center"> 到达时间</th>
+                <th style="text-align: center">价格</th>
+            </tr>
+            </thead>
+            <tbody style="text-align: center">
+            {% for flight in booked_flights %}
+                <tr>
+                    <td>{{ flight.name }}</td>
+                    <td>{{ flight.leave_city }}{{ flight.leave_airport }}</td>
+                    <td>{{ flight.arrive_city }}{{ flight.arrive_airport }}</td>
+                    <td>{{ flight.leave_time }}</td>
+                    <td>{{ flight.arrive_time }}</td>
+                    <td>￥{{ flight.price }} &nbsp;&nbsp;&nbsp;
+                        <button class="btn btn-sm btn-danger" onclick="refund({{ flight.id }})">退票</button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

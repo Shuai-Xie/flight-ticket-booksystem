@@ -1,0 +1,33 @@
+{% extends 'booksystem/base.html' %}
+
+{% block content %}
+    <div class="container-fluid" style="margin-top: 20px">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <center>
+                            <h1>注册账号</h1><br>
+                        </center>
+                        <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% include 'booksystem/form_template.html' %}
+                            <div class="form-group">
+                                <div align="center">
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-footer" align="center">
+                        Already have an account? <a href="{% url 'booksystem:login_user' %}">Click here</a> to log in.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+

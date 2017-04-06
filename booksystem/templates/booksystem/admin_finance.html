@@ -1,0 +1,125 @@
+{% extends 'booksystem/base.html' %}
+{% block login_display %}
+    <a href="#">欢迎您 admin 先生/女士</a> <!--用#就不会跳转了-->
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="container-fluid col-sm-12" style="margin-top: 20px">
+        <div class="col-sm-4">
+            <div class="panel panel-primary">
+                <div class="panel panel-heading">
+                    周收入
+                </div>
+                <div>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <th style="text-align: center">编号</th>
+                        <th style="text-align: center">周次</th>
+                        <th style="text-align: center">航班架次</th>
+                        <th style="text-align: center">收入</th>
+                        </thead>
+                        <tbody align="center">
+                        {% for income in week_incomes %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ income.metric }}</td>
+                                <td>{{ income.flight_sum }}</td>
+                                <td>{{ income.income }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="panel panel-primary">
+                <div class="panel panel-heading">
+                    月收入
+                </div>
+                <div>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <th style="text-align: center">编号</th>
+                        <th style="text-align: center">月份</th>
+                        <th style="text-align: center">航班架次</th>
+                        <th style="text-align: center">收入</th>
+                        </thead>
+                        <tbody align="center">
+                        {% for income in month_incomes %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ income.metric }}</td>
+                                <td>{{ income.flight_sum }}</td>
+                                <td>{{ income.income }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="panel panel-primary">
+                <div class="panel panel-heading">
+                    年收入
+                </div>
+                <div>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <th style="text-align: center">编号</th>
+                        <th style="text-align: center">年份</th>
+                        <th style="text-align: center">航班架次</th>
+                        <th style="text-align: center">收入</th>
+                        </thead>
+                        <tbody align="center">
+                        {% for income in year_incomes %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ income.metric }}</td>
+                                <td>{{ income.flight_sum }}</td>
+                                <td>{{ income.income }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="book_orders" style="margin-left: 20px;margin-right: 20px">
+            <div class="col-sm-12" style="background-color: white">
+                <h1>订单列表</h1>
+                <div>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <th style="text-align: center">编号</th>
+                        <th style="text-align: center">旅客</th>
+                        <th style="text-align: center">航班</th>
+                        <th style="text-align: center">路线</th>
+                        <th style="text-align: center">起飞时间</th>
+                        <th style="text-align: center">机票</th>
+                        </thead>
+                        <tbody align="center">
+                        {% for order in order_set %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ order.passenger_name }}</td>
+                                <td>{{ order.flight_name }}</td>
+                                <td>{{ order.flight_route }}</td>
+                                <td>{{ order.flight_ltime }}</td>
+                                <td>{{ order.flight_price }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

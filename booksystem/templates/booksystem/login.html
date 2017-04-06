@@ -1,0 +1,47 @@
+{% extends 'booksystem/base.html' %}
+
+{% block content %}
+    <div class="container-fluid" style="margin-top: 20px">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <center>
+                            <h1>登录账号</h1><br>
+                        </center>
+                        <form class="form-horizontal" role="form" action="{% url 'booksystem:login_user' %}" method="post"
+                              enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="control-label col-sm-6" for="id_username">
+                                    Username:
+                                </label>
+                                <div class="col-sm-6">
+                                    <input id="id_username" maxlength="10" name="username" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-6" for="id_password">
+                                    Password:
+                                </label>
+                                <div class="col-sm-6">
+                                    <input id="id_password" maxlength="10" name="password" type="password">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div align="center">
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-footer" align="center">
+                        Don't have an account? <a href="{% url 'booksystem:register' %}">Click here</a> to register.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

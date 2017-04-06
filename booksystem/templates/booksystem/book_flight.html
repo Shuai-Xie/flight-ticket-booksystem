@@ -1,0 +1,91 @@
+{% extends 'booksystem/base.html' %}
+
+{% block login_display %}
+    <a href="#">欢迎您 {{ username }} 先生/女士</a> <!--用#就不会跳转了-->
+{% endblock %}
+
+{% block js %}
+    <script>
+
+        function confirm_info() {
+            var remain_seats = document.getElementById('remain_seats').innerHTML;
+            document.getElementById('book_btns').style.display = "none";
+            if (remain_seats > 0) {
+                document.getElementById('book_success').style.display = "block";
+            } else {
+                document.getElementById('book_failure').style.display = "block";
+            }
+        }
+
+        // ajax异步刷新页面
+        function PostData() {
+            $.ajax({
+                type: "POST",
+                url: "",
+                data: ""
+            });
+            return false; // 必须这一句，不然还会刷新页面
+        }
+
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid" style="margin-top: 20px">
+        <div class="alert" style="background-color: white;overflow: hidden"> <!--超出部分也是白色底-->
+            <h1>尊敬的旅客</h1>
+            <div id="info_body" style="margin-left: 50px;margin-right: 50px">
+                <p>
+                    您选择了 <strong style="font-size: large"> {{ flight.name }} </strong> 次航班，
+                    该航班还有余票
+                    <strong id="remain_seats"
+                            style="font-size: xx-large;color: #ff6600;font-style: italic">{{ flight.capacity }}</strong>
+                    张。
+                </p>
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center">航班</th>
+                        <th style="text-align: center">起飞机场</th>
+                        <th style="text-align: center">到达机场</th>
+                        <th style="text-align: center">起飞时间</th>
+                        <th style="text-align: center">到达时间</th>
+                        <th style="text-align: center">价格</th>
+                    </tr>
+                    </thead>
+                    <tbody style="text-align: center">
+                    <tr>
+                        <td>{{ flight.name }}</td>
+                        <td>{{ flight.leave_city }}{{ flight.leave_airport }}</td>
+                        <td>{{ flight.arrive_city }}{{ flight.arrive_airport }}</td>
+                        <td>{{ flight.leave_time }}</td>
+                        <td>{{ flight.arrive_time }}</td>
+                        <td>￥{{ flight.price }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div id="book_success" style="display: none">
+                    <p style="color: green;font-size: large;font-weight: bold">
+                        您已成功订购了此次航班，请保管好航班信息，祝您旅途愉快！
+                    </p>
+                </div>
+
+                <div id="book_failure" style="display: none">
+                    <p style="color: red;font-size: large;font-weight: bold">
+                        该航班已无余票，请选择其他航班，祝您旅途愉快！
+                    </p>
+                </div>
+
+                <div id="book_btns" align="right">
+                    <!--div内容右对齐-->
+                    <form onsubmit="return PostData()" method="post" style="display: inline">
+                        <input class="btn btn-primary" style="width: 80px" value="确认" type="submit"
+                               onclick="confirm_info()">
+                    </form>
+                    <a href="" class="btn btn-danger" style="width: 80px" onclick="history.back();">返回</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
