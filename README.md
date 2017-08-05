@@ -6,7 +6,7 @@
 
 ### 5.1 欢迎界面
 
-![欢迎界面](http://upload-images.jianshu.io/upload_images/1877813-6e682338212d2ec2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![欢迎界面](http://upload-images.jianshu.io/upload_images/1877813-c078119ecf8b22bf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 拟定一趟行程（长沙→上海 2017/4/2）
 
