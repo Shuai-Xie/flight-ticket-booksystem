@@ -6,11 +6,11 @@
 
 ### 5.1 欢迎界面
 
-![](http://upload-images.jianshu.io/upload_images/1877813-6e682338212d2ec2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![欢迎界面](http://upload-images.jianshu.io/upload_images/1877813-6e682338212d2ec2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 拟定一趟行程（长沙→上海 2017/4/2）
 
-![](http://upload-images.jianshu.io/upload_images/1877813-8e7d67d4ba9be92c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![输入行程](http://upload-images.jianshu.io/upload_images/1877813-8e7d67d4ba9be92c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ### 5.2 查询界面
 用户 Let’s Go 之后，加载查询结果页面。
