@@ -259,10 +259,10 @@ def result(request):
                                                 arrive_city=passenger_acity)
             usable_flights = []
             for flight in all_flights:  # off-set aware
-                flight.leave_time = flight.leave_time.replace(
-                    tzinfo=None)  # replace方法必须要赋值。。笑哭
-                if flight.leave_time.date() == passenger_ltime.date(
-                ):  # 只查找当天的航班
+                # replace方法必须要赋值。。笑哭
+                flight.leave_time = flight.leave_time.replace(tzinfo=None)
+                # 只查找当天的航班
+                if flight.leave_time.date() == passenger_ltime.date():
                     usable_flights.append(flight)
 
             # 按不同的key排序
