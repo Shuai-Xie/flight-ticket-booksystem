@@ -1,13 +1,15 @@
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from django.views.decorators.csrf import csrf_exempt
+import datetime
+from operator import attrgetter
+
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import Permission, User
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+
+from .classes import IncomeMetric, Order
 from .forms import PassengerInfoForm, UserForm
 from .models import Flight
-from .classes import IncomeMetric, Order
-from django.contrib.auth.models import Permission, User
-import datetime, pytz
-from operator import attrgetter
 
 ADMIN_ID = 1
 
@@ -16,7 +18,8 @@ ADMIN_ID = 1
 # 统计航空公司每周、每月，每年营业收入情况。
 def admin_finance(request):
     all_flights = Flight.objects.all()
-    all_flights = sorted(all_flights, key=attrgetter('leave_time'))  # 将所有航班按照起飞时间排序
+    all_flights = sorted(all_flights,
+                         key=attrgetter('leave_time'))  # 将所有航班按照起飞时间排序
 
     # 将航班每天的输入打上不同的时间标签 [周，月，日]
     week_day_incomes = []
@@ -31,26 +34,33 @@ def admin_finance(request):
         if flight.income > 0:  # 只统计有收入的航班
             # 打上周标签
             this_week = flight.leave_time.strftime('%W')  # datetime获取周
-            week_day_incomes.append((this_week, flight.income))  # 添加元组(week, income)
+            week_day_incomes.append(
+                (this_week, flight.income))  # 添加元组(week, income)
             week_set.add(this_week)
             # 打上月标签
             this_month = flight.leave_time.strftime('%m')  # datetime获取月
-            month_day_incomes.append((this_month, flight.income))  # 添加元组(month, income)
+            month_day_incomes.append(
+                (this_month, flight.income))  # 添加元组(month, income)
             month_set.add(this_month)
             # 打上年标签
             this_year = flight.leave_time.strftime('%Y')  # datetime获取年
-            year_day_incomes.append((this_year, flight.income))  # 添加元组(year, income)
+            year_day_incomes.append(
+                (this_year, flight.income))  # 添加元组(year, income)
             year_set.add(this_year)
 
     # 存储每周收入
     # 将每周的收入用 IncomeMetric 类型存储在 week_incomes List中
     week_incomes = []
     for week in week_set:
-        income = sum(x[1] for x in week_day_incomes if x[0] == week)  # 同周次的income求和
-        flight_sum = sum(1 for x in week_day_incomes if x[0] == week)  # 同周次的航班总数目
-        week_income = IncomeMetric(week, flight_sum, income)  # 将数据存储到IncomeMetric类中，方便jinja语法
+        income = sum(x[1] for x in week_day_incomes
+                     if x[0] == week)  # 同周次的income求和
+        flight_sum = sum(1 for x in week_day_incomes
+                         if x[0] == week)  # 同周次的航班总数目
+        week_income = IncomeMetric(week, flight_sum,
+                                   income)  # 将数据存储到IncomeMetric类中，方便jinja语法
         week_incomes.append(week_income)
-    week_incomes = sorted(week_incomes, key=attrgetter('metric'))  # 将List类型的 week_incomes 按周次升序排列
+    week_incomes = sorted(
+        week_incomes, key=attrgetter('metric'))  # 将List类型的 week_incomes 按周次升序排列
 
     # 存储每月收入
     # 将每月的收入用 IncomeMetric 类型存储在 month_incomes List中
@@ -60,7 +70,9 @@ def admin_finance(request):
         flight_sum = sum(1 for x in month_day_incomes if x[0] == month)
         month_income = IncomeMetric(month, flight_sum, income)
         month_incomes.append(month_income)
-    month_incomes = sorted(month_incomes, key=attrgetter('metric'))  # 将List类型的 month_incomes 按月份升序排列
+    month_incomes = sorted(
+        month_incomes,
+        key=attrgetter('metric'))  # 将List类型的 month_incomes 按月份升序排列
 
     # 存储每年收入
     # 将每年的收入用 IncomeMetric 类型存储在 year_incomes List中
@@ -70,7 +82,8 @@ def admin_finance(request):
         flight_sum = sum(1 for x in year_day_incomes if x[0] == year)
         year_income = IncomeMetric(year, flight_sum, income)
         year_incomes.append(year_income)
-    year_incomes = sorted(year_incomes, key=attrgetter('metric'))  # 将List类型的 year_incomes 按年份升序排列
+    year_incomes = sorted(
+        year_incomes, key=attrgetter('metric'))  # 将List类型的 year_incomes 按年份升序排列
 
     # 存储order信息
     passengers = User.objects.exclude(pk=1)  # 去掉管理员
@@ -95,14 +108,15 @@ def admin_finance(request):
 # 显示用户订单信息
 # 航班信息，退票管理
 def user_info(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         # 如果用户是管理员，render公司航班收入统计信息页面 admin_finance
         if request.user.id == ADMIN_ID:
             context = admin_finance(request)  # 获取要传入前端的数据
             return render(request, 'booksystem/admin_finance.html', context)
         # 如果用户是普通用户，render用户的机票信息 user_info
         else:
-            booked_flights = Flight.objects.filter(user=request.user)  # 从 booksystem_flight_user 表过滤出该用户订的航班
+            booked_flights = Flight.objects.filter(
+                user=request.user)  # 从 booksystem_flight_user 表过滤出该用户订的航班
             context = {
                 'booked_flights': booked_flights,
                 'username': request.user.username,  # 导航栏信息更新
@@ -120,7 +134,7 @@ def index(request):
 # 免除csrf
 @csrf_exempt
 def book_ticket(request, flight_id):
-    if not request.user.is_authenticated():  # 如果没登录就render登录页面
+    if not request.user.is_authenticated:  # 如果没登录就render登录页面
         return render(request, 'booksystem/login.html')
     else:
         flight = Flight.objects.get(pk=flight_id)
@@ -142,10 +156,7 @@ def book_ticket(request, flight_id):
                 flight.user.add(request.user)
                 flight.save()  # 一定要记着save
         # 传递更改之后的票务信息
-        context = {
-            'flight': flight,
-            'username': request.user.username
-        }
+        context = {'flight': flight, 'username': request.user.username}
         return render(request, 'booksystem/book_flight.html', context)
 
 
@@ -179,18 +190,20 @@ def login_user(request):
         if user is not None:  # 登录成功
             if user.is_active:  # 加载订票页面
                 login(request, user)
-                context = {
-                    'username': request.user.username
-                }
+                context = {'username': request.user.username}
                 if user.id == ADMIN_ID:
                     context = admin_finance(request)  # 获取要传入前端的数据
-                    return render(request, 'booksystem/admin_finance.html', context)
+                    return render(request, 'booksystem/admin_finance.html',
+                                  context)
                 else:
                     return render(request, 'booksystem/result.html', context)
             else:
-                return render(request, 'booksystem/login.html', {'error_message': 'Your account has been disabled'})
+                return render(
+                    request, 'booksystem/login.html',
+                    {'error_message': 'Your account has been disabled'})
         else:  # 登录失败
-            return render(request, 'booksystem/login.html', {'error_message': 'Invalid login'})
+            return render(request, 'booksystem/login.html',
+                          {'error_message': 'Invalid login'})
     return render(request, 'booksystem/login.html')
 
 
@@ -207,10 +220,9 @@ def register(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                context = {
-                    'username': request.user.username
-                }
-                return render(request, 'booksystem/result.html', context)  # 注册成功直接render result页面
+                context = {'username': request.user.username}
+                return render(request, 'booksystem/result.html',
+                              context)  # 注册成功直接render result页面
     context = {
         "form": form,
     }
@@ -238,21 +250,28 @@ def result(request):
             # )
 
             # 全设为aware比较
-            passenger_ltime = datetime.datetime.combine(passenger_ldate, datetime.time())
+            passenger_ltime = datetime.datetime.combine(passenger_ldate,
+                                                        datetime.time())
             print(passenger_ltime)
 
             # filter 可用航班
-            all_flights = Flight.objects.filter(leave_city=passenger_lcity, arrive_city=passenger_acity)
+            all_flights = Flight.objects.filter(leave_city=passenger_lcity,
+                                                arrive_city=passenger_acity)
             usable_flights = []
             for flight in all_flights:  # off-set aware
-                flight.leave_time = flight.leave_time.replace(tzinfo=None)  # replace方法必须要赋值。。笑哭
-                if flight.leave_time.date() == passenger_ltime.date():  # 只查找当天的航班
+                flight.leave_time = flight.leave_time.replace(
+                    tzinfo=None)  # replace方法必须要赋值。。笑哭
+                if flight.leave_time.date() == passenger_ltime.date(
+                ):  # 只查找当天的航班
                     usable_flights.append(flight)
 
             # 按不同的key排序
-            usable_flights_by_ltime = sorted(usable_flights, key=attrgetter('leave_time'))  # 起飞时间从早到晚
-            usable_flights_by_atime = sorted(usable_flights, key=attrgetter('arrive_time'))
-            usable_flights_by_price = sorted(usable_flights, key=attrgetter('price'))  # 价格从低到高
+            usable_flights_by_ltime = sorted(
+                usable_flights, key=attrgetter('leave_time'))  # 起飞时间从早到晚
+            usable_flights_by_atime = sorted(usable_flights,
+                                             key=attrgetter('arrive_time'))
+            usable_flights_by_price = sorted(usable_flights,
+                                             key=attrgetter('price'))  # 价格从低到高
 
             # 转换时间格式
             time_format = '%H:%M'
@@ -266,7 +285,8 @@ def result(request):
 
             # 虽然只转换了一个list，其实所有的都转换了
             for flight in usable_flights_by_price:
-                flight.leave_time = flight.leave_time.strftime(time_format)  # 转成了str
+                flight.leave_time = flight.leave_time.strftime(
+                    time_format)  # 转成了str
                 flight.arrive_time = flight.arrive_time.strftime(time_format)
 
             # 决定 search_head , search_failure 是否显示
@@ -288,14 +308,13 @@ def result(request):
                 'dis_search_head': dis_search_head,
                 'dis_search_failure': dis_search_failure
             }
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:  # FIXME: django higher version 'bool' object is not callable
                 context['username'] = request.user.username
-            return render(request, 'booksystem/result.html', context)  # 最前面如果加了/就变成根目录了，url错误
+            return render(request, 'booksystem/result.html',
+                          context)  # 最前面如果加了/就变成根目录了，url错误
         else:
-            return render(request, 'booksystem/index.html')  # 在index界面提交的表单无效，就保持在index界面
+            return render(
+                request, 'booksystem/index.html')  # 在index界面提交的表单无效，就保持在index界面
     else:
-        context = {
-            'dis_search_head': 'none',
-            'dis_search_failure': 'none'
-        }
+        context = {'dis_search_head': 'none', 'dis_search_failure': 'none'}
     return render(request, 'booksystem/result.html', context)

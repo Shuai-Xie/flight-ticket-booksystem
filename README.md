@@ -1,6 +1,25 @@
+# 机票预订系统
+
 [详细介绍 - 数据库课程设计 - 机票预订系统 - 简书](http://www.jianshu.com/p/60a392df9f03)
 
 注册和登录界面都学习这位仁兄的 [buckyroberts-Viberr](https://github.com/buckyroberts/Viberr)
+
+登录账号
+
+- 普通用户：demo/demo123
+- 管理员：admin/admin123
+
+备注：普通用户账号，可以在登录界面，注册新账号。
+
+如果想修改用户密码，可参考根目录 `reset_user_passwords.py`
+
+## 启动方式
+
+```bash
+$ python manage.py runserver 8000
+```
+
+打开浏览器 http://localhost:8000
 
 ## 五、界面设计
 

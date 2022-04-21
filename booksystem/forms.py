@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+
 from .models import Flight
 
 
@@ -11,6 +12,7 @@ class PassengerInfoForm(forms.Form):
 
 # 自定义Flight对象的输入信息
 class FlightForm(forms.ModelForm):
+
     class Meta:
         model = Flight
         exclude = ['user']  # user信息不能从后台输入
